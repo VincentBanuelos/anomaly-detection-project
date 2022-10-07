@@ -18,16 +18,9 @@ def get_logs():
     else:
         ''' Pulls curriculum log from CodeUP database and translate it to dataframe'''
         query = '''
-        SELECT logs.date,  logs.time,
-        logs.path as endpoint,
-        logs.user_id,
-        logs.ip,
-        cohorts.name as cohort_name,
-        cohorts.start_date,
-        cohorts.end_date,
-        cohorts.program_id
-        FROM logs
-        JOIN cohorts ON logs.cohort_id= cohorts.id;
+    SELECT *
+    FROM logs
+    LEFT JOIN cohorts ON logs.cohort_id=cohorts.id;
         '''
         
         
@@ -39,6 +32,8 @@ def get_logs():
 def prepare_log():
     ''' This prepare function set the date column as index, drop unwanted columns    and set the start date and end date to date time format'''
     df = get_logs()
+    df = df.drop(columns=['deleted_at', 'updated_at', 'created_at', 'slack','cohort_id'])
+    df = df.rename(columns={'path':'endpoint','name':'cohort_name'})
     # Reassign the sale_date column to be a datetime type
     df.date = pd.to_datetime(df.date)
     # Sort rows by the date and then set the index as that date
