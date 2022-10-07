@@ -32,7 +32,7 @@ def get_logs():
 def prepare_log():
     ''' This prepare function set the date column as index, drop unwanted columns    and set the start date and end date to date time format'''
     df = get_logs()
-    df = df.drop(columns=['deleted_at', 'updated_at', 'created_at', 'slack','cohort_id'])
+    df = df.drop(columns=['deleted_at', 'updated_at', 'created_at', 'slack','cohort_id','id'])
     df = df.rename(columns={'path':'endpoint','name':'cohort_name'})
     # Reassign the sale_date column to be a datetime type
     df.date = pd.to_datetime(df.date)
